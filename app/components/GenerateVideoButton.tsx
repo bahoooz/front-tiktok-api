@@ -1,9 +1,35 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
+import { AiOutlineLoading } from "react-icons/ai";
 
 export default function GenerateVideoButton() {
+  const [loading, setLoading] = useState(false);
+  const [dataVideo, setDataVideo] = useState({});
+  const handleGenerate = async () => {
+    try {
+      setLoading(true);
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/video/generate`,
+        {
+          method: "POST",
+        }
+      );
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status} – ${await res.text()}`);
+      }
+      const data = await res.json();
+      setDataVideo(data);
+      console.log(dataVideo);
+      setLoading(false);
+    } catch (error) {}
+  };
   return (
-    <button className="bg-blue-900 text-white py-3 px-4 rounded-2xl">
-      Generate AI Video
+    <button
+      onClick={handleGenerate}
+      className="bg-blue-900 text-white py-3 px-4 rounded-2xl cursor-pointer animate-spin"
+    >
+      Generate AI Video {loading && <AiOutlineLoading />}
     </button>
   );
 }
