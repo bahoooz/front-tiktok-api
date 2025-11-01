@@ -26,10 +26,12 @@ export default function GenerateVideoButton() {
   };
   return (
     <button
+      disabled
       onClick={handleGenerate}
       className="bg-blue-900 text-white py-3 px-4 rounded-2xl cursor-pointer"
     >
-      Generate AI Video {loading && <AiOutlineLoading className="animate-spin" />}
+      Generate AI Video{" "}
+      {loading && <AiOutlineLoading className="animate-spin" />}
     </button>
   );
 }
