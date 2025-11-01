@@ -7,6 +7,9 @@ export default function Footer() {
       <Link href={"/"} className="underline">
         Home
       </Link>
+      <Link href={"/cut-tool"} className="underline">
+        Cut Tool
+      </Link>
       <Link href={"/terms"} className="underline">
         Terms of Service
       </Link>

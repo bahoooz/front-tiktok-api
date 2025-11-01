@@ -46,6 +46,11 @@ export default function ListTiktok() {
               <h4 className="text-sm">
                 <span className="underline">OperationID :</span> {v.operationId}
               </h4>
+              {v.url_link && (
+                <h5 className="text-sm">
+                  <span className="underline">URL :</span> {v.url_link}
+                </h5>
+              )}
               {v.uri && (
                 <h5 className="text-sm">
                   <span className="underline">URI :</span> {v.uri}

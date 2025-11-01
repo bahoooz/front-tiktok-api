@@ -6,5 +6,6 @@ export type Video = {
   isPosted: boolean;
   prompt: string;
   uri: string;
+  url_link: string;
   createdAt: string;
 };
