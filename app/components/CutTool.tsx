@@ -48,8 +48,10 @@ export default function CutTool() {
 
       const data = await res.json();
       setSuccess(data.message);
-    } catch (err: any) {
-      setError(err.message ?? "Erreur inconnue");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message ?? "Erreur inconnue");
+      }
     } finally {
       setLoading(false);
     }

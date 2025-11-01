@@ -6,6 +6,7 @@ import { AiOutlineLoading } from "react-icons/ai";
 export default function GenerateVideoButton() {
   const [loading, setLoading] = useState(false);
   const [dataVideo, setDataVideo] = useState({});
+  const [error, setError] = useState<string | null>(null);
   const handleGenerate = async () => {
     try {
       setLoading(true);
@@ -22,7 +23,11 @@ export default function GenerateVideoButton() {
       setDataVideo(data);
       console.log(dataVideo);
       setLoading(false);
-    } catch (error) {}
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message ?? "Erreur inconnue");
+      }
+    }
   };
   return (
     <button
@@ -32,6 +37,7 @@ export default function GenerateVideoButton() {
     >
       Generate AI Video{" "}
       {loading && <AiOutlineLoading className="animate-spin" />}
+      {error && error}
     </button>
   );
 }
