@@ -37,7 +37,7 @@ export default function CutTool() {
 
       // 2) envoyer au backend
       const res = await fetch(
-        `http://localhost:4000/cut?duration=${duration}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/cut?duration=${duration}`,
         {
           method: "POST",
           body: formData,
@@ -99,9 +99,11 @@ export default function CutTool() {
           : "Découper"}
       </button>
       {error && <p className="text-red-600">{error}</p>}
-      {(success && !loading && wait) && <p className="text-green-600">{success}</p>}
+      {success && !loading && wait && (
+        <p className="text-green-600">{success}</p>
+      )}
       <br />{" "}
-      {(downloadUrl && !loading && wait) && (
+      {downloadUrl && !loading && wait && (
         <a
           className="border px-4 py-2 rounded cursor-pointer"
           href={downloadUrl}
