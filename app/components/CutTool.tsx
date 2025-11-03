@@ -6,8 +6,10 @@ export default function CutTool() {
   const [file, setFile] = useState<File | null>(null);
   const [duration, setDuration] = useState<number>(60);
   const [loading, setLoading] = useState(false);
+  const [downloadUrl, setDownloadUrl] = useState("");
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [wait, setWait] = useState(false);
 
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0] || null;
@@ -35,7 +37,7 @@ export default function CutTool() {
 
       // 2) envoyer au backend
       const res = await fetch(
-        `http://localhost:4001/cut?duration=${duration}`,
+        `http://localhost:4000/cut?duration=${duration}`,
         {
           method: "POST",
           body: formData,
@@ -48,6 +50,11 @@ export default function CutTool() {
 
       const data = await res.json();
       setSuccess(data.message);
+      setDownloadUrl(data.downloadUrl);
+      setWait(true);
+      setTimeout(() => {
+        setWait(false);
+      }, 10_000);
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message ?? "Erreur inconnue");
@@ -68,10 +75,9 @@ export default function CutTool() {
           className="border p-2 rounded w-full"
         />
       </div>
-
       <div>
         <label className="block mb-1 font-medium">
-          Durée des segments (secondes)
+          Durée des parties (secondes)
         </label>
         <input
           type="number"
@@ -81,17 +87,29 @@ export default function CutTool() {
           className="border p-2 rounded w-40"
         />
       </div>
-
       <button
         type="submit"
-        disabled={loading || !file}
+        disabled={loading || !file || wait}
         className="px-4 py-2 rounded bg-black text-white disabled:opacity-50"
       >
-        {loading ? "Envoi…" : "Découper"}
+        {loading
+          ? "En cours de découpage et d'archivage"
+          : wait
+          ? "Cleanup interne en cours... (10s restantes)"
+          : "Découper"}
       </button>
-
       {error && <p className="text-red-600">{error}</p>}
-      {success && <p className="text-green-600">{success}</p>}
+      {(success && !loading && wait) && <p className="text-green-600">{success}</p>}
+      <br />{" "}
+      {(downloadUrl && !loading && wait) && (
+        <a
+          className="border px-4 py-2 rounded cursor-pointer"
+          href={downloadUrl}
+          download={"parties.zip"}
+        >
+          Télécharger les vidéos
+        </a>
+      )}
     </form>
   );
 }
