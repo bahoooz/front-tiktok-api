@@ -16,6 +16,7 @@ export default function PromptEdit({
   useEffect(() => {
     setFormData(prompt);
     setCurrentPrompt(prompt.prompt)
+    console.log(formData)
   }, [prompt]);
 
   const handleChange = (
@@ -42,11 +43,11 @@ export default function PromptEdit({
         <div className="flex flex-col w-full gap-2">
           <label htmlFor="intro">Intro</label>
           <input
-            disabled
+            // disabled
             value={formData.intro}
             onChange={handleChange}
             name="intro"
-            className="border p-2 bg-gray-200 cursor-not-allowed rounded-md"
+            className="border p-2 bg-gray-200 rounded-md"
           />
         </div>
         <div className="flex flex-col w-full gap-2">
