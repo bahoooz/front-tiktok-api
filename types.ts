@@ -9,3 +9,15 @@ export type Video = {
   url_link: string;
   createdAt: string;
 };
+
+export type Prompt = {
+  id: number;
+  intro: string;
+  place: string;
+  habit: string;
+  rapSpeed: string;
+  animal?: string;
+  rapText: string;
+  instrumentalFlow: string;
+  prompt: string;
+};
