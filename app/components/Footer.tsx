@@ -3,7 +3,7 @@ import React from "react";
 
 export default function Footer() {
   return (
-    <footer className="absolute bottom-4 left-12 flex gap-4">
+    <footer className="hidden absolute bottom-4 left-12 xl:flex gap-4">
       <Link href={"/"} className="underline">
         Home
       </Link>

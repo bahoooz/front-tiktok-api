@@ -37,9 +37,9 @@ export default function PromptEdit({
     // "Génère une grand-mère française de 100 ans"
     <form
       onSubmit={handleSubmit}
-      className="border rounded-xl px-4 py-8 w-[800px] flex flex-col gap-6"
+      className="border rounded-xl px-4 py-8 w-full max-w-[800px] flex flex-col gap-6 overflow-y-auto max-h-screen"
     >
-      <div className="flex gap-8">
+      <div className="flex flex-col gap-4 md:flex-row md:gap-8">
         <div className="flex flex-col w-full gap-2">
           <label htmlFor="intro">Intro</label>
           <input
@@ -61,7 +61,7 @@ export default function PromptEdit({
           />
         </div>
       </div>
-      <div className="flex gap-8">
+      <div className="flex flex-col gap-4 md:flex-row md:gap-8">
         <div className="flex flex-col w-full gap-2">
           <label htmlFor="habit">Tenue vestimentaire</label>
           <input
@@ -90,7 +90,7 @@ export default function PromptEdit({
           </select>
         </div>
       </div>
-      <div className="flex gap-8">
+      <div className="flex flex-col gap-4 md:flex-row md:gap-8">
         <div className="flex flex-col w-full gap-2">
           <label htmlFor="animal">
             Animal <span className="text-sm text-gray-500">(facultatif)</span>
