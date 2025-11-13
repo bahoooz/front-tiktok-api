@@ -35,17 +35,6 @@ export default function PromptEditPage() {
         prompt.id === promptSaved.id ? promptSaved : prompt
       )
     );
-
-    await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/prompt/${updatedPrompt.id}`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedPrompt),
-      }
-    );
   };
 
   const currentPrompt = prompts.find((prompt) => prompt.id === page);
