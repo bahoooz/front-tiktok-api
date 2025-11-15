@@ -20,4 +20,5 @@ export type Prompt = {
   rapText: string;
   instrumentalFlow: string;
   prompt: string;
+  updatedAt: string;
 };

@@ -1,6 +1,8 @@
 "use client";
 
 import { Prompt } from "@/types";
+import { formatDate } from "@/utils/formatDate";
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
 
 export default function PromptEdit({
@@ -12,11 +14,13 @@ export default function PromptEdit({
 }) {
   const [formData, setFormData] = useState(prompt);
   const [currentPrompt, setCurrentPrompt] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [successBtnTiktok, setSuccessBtnTiktok] = useState(false);
 
   useEffect(() => {
     setFormData(prompt);
-    setCurrentPrompt(prompt.prompt)
-    console.log(formData)
+    setCurrentPrompt(prompt.prompt);
+    console.log(formData);
   }, [prompt]);
 
   const handleChange = (
@@ -28,16 +32,45 @@ export default function PromptEdit({
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onSave(formData);
+    try {
+      setIsLoading(true);
+      await onSave(formData); // ⬅️ on attend le fetch du parent
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleTiktokBtnSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      setIsLoading(true);
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/generate-to-upload`,
+        {
+          method: "POST",
+        }
+      );
+      const data = await res.json();
+      setSuccessBtnTiktok(true);
+      setTimeout(() => {
+        setSuccessBtnTiktok(false);
+      }, 3000);
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+      setSuccessBtnTiktok(false);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     // "Génère une grand-mère française de 100 ans"
     <form
       onSubmit={handleSubmit}
-      className="border rounded-xl px-4 py-8 w-full max-w-[800px] flex flex-col gap-6 overflow-y-auto max-h-screen"
+      className="border rounded-xl px-4 py-8 w-full max-w-[850px] flex flex-col gap-6 overflow-y-auto max-h-screen"
     >
       <div className="flex flex-col gap-4 md:flex-row md:gap-8">
         <div className="flex flex-col w-full gap-2">
@@ -132,13 +165,42 @@ export default function PromptEdit({
         <h2 className="mb-2">Prompt actuel :</h2>
         <p className="text-sm">{String(currentPrompt)}</p>
       </div>
-      <div>
-        <button
-          className="border w-fit p-2 rounded-md cursor-pointer hover:bg-gray-200"
-          type="submit"
-        >
-          Mettre à jour
-        </button>
+      <div className="flex justify-between items-end gap-8">
+        <div className="flex w-2/3 gap-4">
+          <button
+            className="border h-[40px] rounded-md cursor-pointer hover:bg-gray-200 w-full"
+            type="submit"
+            disabled={isLoading}
+          >
+            {isLoading ? "Chargement" : "Mettre à jour"}
+          </button>
+          <button
+            className="border aspect-square flex items-center justify-center gap-1 w-full h-[40px] rounded-md cursor-pointer hover:bg-gray-200 p-1"
+            disabled={isLoading}
+            onClick={handleTiktokBtnSubmit}
+          >
+            {successBtnTiktok ? (
+              <>
+                <p className="hidden md:block">Génération vidéo commencée ✅</p>
+                <p className="md:hidden">✅</p>
+              </>
+            ) : (
+              <Image
+                className="w-6"
+                src={"/assets/tiktok.png"}
+                width={500}
+                height={500}
+                alt="tiktok logo"
+              />
+            )}
+          </button>
+        </div>
+        <div className="flex justify-center items-center rounded-md text-green-400 font-medium text-sm">
+          <p className="flex gap-1">
+            <span className="hidden md:flex">Dernière modif :</span>{" "}
+            {formatDate(formData.updatedAt)}
+          </p>
+        </div>
       </div>
     </form>
   );
