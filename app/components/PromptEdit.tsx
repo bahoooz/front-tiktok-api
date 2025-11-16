@@ -50,6 +50,9 @@ export default function PromptEdit({
         `${process.env.NEXT_PUBLIC_API_URL}/generate-to-upload`,
         {
           method: "POST",
+          body: JSON.stringify({
+            promptId: formData.id
+          })
         }
       );
       const data = await res.json();
