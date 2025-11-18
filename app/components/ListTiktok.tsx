@@ -1,6 +1,7 @@
 "use client";
 
 import { Video } from "@/types";
+import { formatDate } from "@/utils/formatDate";
 import React, { useEffect, useState } from "react";
 import { AiFillTikTok, AiOutlineLoading } from "react-icons/ai";
 import { FaCheck, FaHourglassStart } from "react-icons/fa";
@@ -56,7 +57,7 @@ export default function ListTiktok() {
                   <span className="underline">URI :</span> {v.uri}
                 </h5>
               )}
-              <h6 className="text-xs">{v.createdAt}</h6>
+              <h6 className="text-xs">{formatDate(v.createdAt)}</h6>
             </div>
             <div className="flex gap-6">
               <div>
